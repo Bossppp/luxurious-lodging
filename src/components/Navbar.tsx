@@ -1,12 +1,37 @@
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, X, Hotel, User, LogIn, ShoppingBag, Search } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Menu, X, Hotel, User, LogIn, ShoppingBag, Search, LogOut, Shield, Home, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { UserRole } from '@/lib/types';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // This would be replaced with proper auth state
+  const { isLoggedIn, currentUser, logout, hasRole } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(part => part[0])
+      .join('')
+      .toUpperCase();
+  };
 
   return (
     <nav className="bg-luxe-dark text-white py-4 shadow-md relative z-50">
@@ -31,13 +56,50 @@ const Navbar = () => {
             <Search className="h-5 w-5" />
           </Button>
 
-          {isLoggedIn ? (
-            <Link to="/profile">
-              <Button variant="outline" className="text-luxe-gold border-luxe-gold hover:bg-luxe-gold hover:text-white">
-                <User className="mr-2 h-4 w-4" />
-                Profile
-              </Button>
-            </Link>
+          {isLoggedIn && currentUser ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                  <Avatar className="h-10 w-10 border border-gray-700">
+                    <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
+                    <AvatarFallback className="bg-luxe-gold text-white">
+                      {getInitials(currentUser.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 bg-gray-900 border-gray-700 text-white">
+                <DropdownMenuLabel>
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{currentUser.name}</p>
+                    <p className="text-xs leading-none text-gray-400">{currentUser.email}</p>
+                    <div className="flex items-center mt-1">
+                      <span className="text-xs bg-luxe-gold/20 text-luxe-gold px-2 py-1 rounded-full">
+                        {currentUser.role}
+                      </span>
+                    </div>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-gray-700" />
+                <DropdownMenuItem className="text-white hover:bg-gray-800 cursor-pointer" onClick={() => navigate('/profile')}>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </DropdownMenuItem>
+                
+                {hasRole(UserRole.ADMIN) && (
+                  <DropdownMenuItem className="text-white hover:bg-gray-800 cursor-pointer" onClick={() => navigate('/admin/dashboard')}>
+                    <Shield className="mr-2 h-4 w-4" />
+                    <span>Admin Dashboard</span>
+                  </DropdownMenuItem>
+                )}
+                
+                <DropdownMenuSeparator className="bg-gray-700" />
+                <DropdownMenuItem className="text-white hover:bg-gray-800 cursor-pointer" onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <Link to="/login">
               <Button variant="outline" className="text-luxe-gold border-luxe-gold hover:bg-luxe-gold hover:text-white">
@@ -70,6 +132,7 @@ const Navbar = () => {
               className="flex items-center px-4 py-2 hover:bg-luxe-dark/60 rounded-md" 
               onClick={() => setIsMenuOpen(false)}
             >
+              <Home className="mr-2 h-4 w-4" />
               Home
             </Link>
             <Link 
@@ -93,18 +156,59 @@ const Navbar = () => {
               className="flex items-center px-4 py-2 hover:bg-luxe-dark/60 rounded-md" 
               onClick={() => setIsMenuOpen(false)}
             >
+              <Info className="mr-2 h-4 w-4" />
               About
             </Link>
             <hr className="border-gray-700" />
-            {isLoggedIn ? (
-              <Link 
-                to="/profile" 
-                className="flex items-center px-4 py-2 hover:bg-luxe-dark/60 rounded-md" 
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <User className="mr-2 h-4 w-4" />
-                Profile
-              </Link>
+            
+            {isLoggedIn && currentUser ? (
+              <>
+                <div className="px-4 py-2">
+                  <div className="flex items-center space-x-3">
+                    <Avatar className="h-9 w-9 border border-gray-700">
+                      <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
+                      <AvatarFallback className="bg-luxe-gold text-white">
+                        {getInitials(currentUser.name)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-sm font-medium">{currentUser.name}</p>
+                      <p className="text-xs text-gray-400">{currentUser.role}</p>
+                    </div>
+                  </div>
+                </div>
+                <Link 
+                  to="/profile" 
+                  className="flex items-center px-4 py-2 hover:bg-luxe-dark/60 rounded-md" 
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <User className="mr-2 h-4 w-4" />
+                  Profile
+                </Link>
+                
+                {hasRole(UserRole.ADMIN) && (
+                  <Link 
+                    to="/admin/dashboard" 
+                    className="flex items-center px-4 py-2 hover:bg-luxe-dark/60 rounded-md" 
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <Shield className="mr-2 h-4 w-4" />
+                    Admin Dashboard
+                  </Link>
+                )}
+                
+                <Button
+                  variant="ghost"
+                  className="flex items-center justify-start px-4 py-2 hover:bg-luxe-dark/60 rounded-md w-full text-left"
+                  onClick={() => {
+                    handleLogout();
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </Button>
+              </>
             ) : (
               <Link 
                 to="/login" 

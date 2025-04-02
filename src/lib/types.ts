@@ -1,4 +1,3 @@
-
 export enum UserRole {
   GUEST = "GUEST",
   CUSTOMER = "CUSTOMER",
@@ -297,5 +296,40 @@ export const MOCK_COUPONS: Coupon[] = [
     discountPercentage: 15,
     validUntil: new Date("2024-12-31"),
     description: "15% off for luxury suites"
+  }
+];
+
+// Mock users for different roles
+export const MOCK_USERS: User[] = [
+  {
+    id: "1",
+    name: "John Doe",
+    email: "guest@example.com",
+    role: UserRole.GUEST,
+    points: 0
+  },
+  {
+    id: "2",
+    name: "Alice Smith",
+    email: "customer@example.com",
+    role: UserRole.CUSTOMER,
+    points: 3500,
+    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=150&h=150&auto=format&fit=crop"
+  },
+  {
+    id: "3",
+    name: "Robert Johnson",
+    email: "manager@example.com",
+    role: UserRole.HOTEL_MANAGER,
+    points: 5000,
+    avatar: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?q=80&w=150&h=150&auto=format&fit=crop"
+  },
+  {
+    id: "4",
+    name: "Emma Williams",
+    email: "admin@example.com",
+    role: UserRole.ADMIN,
+    points: 10000,
+    avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=150&h=150&auto=format&fit=crop"
   }
 ];

@@ -6,37 +6,37 @@ import Footer from '@/components/Footer';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { UserRole } from '@/lib/types';
-import { toast } from '@/components/ui/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+
+type LocationState = {
+  redirectTo?: string;
+};
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  const locationState = location.state as LocationState;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // Mock login logic - would connect to authentication service in real app
-    setTimeout(() => {
+    try {
+      const success = await login(email, password);
+      
+      if (success) {
+        // Redirect to the page the user was trying to access, or to homepage
+        const redirectTo = locationState?.redirectTo || '/';
+        navigate(redirectTo);
+      }
+    } finally {
       setLoading(false);
-      
-      // Mock successful login
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userRole', UserRole.CUSTOMER);
-      
-      toast({
-        title: "Login Successful",
-        description: "Welcome back to LuxeStay!",
-      });
-      
-      // Redirect to the page the user was trying to access, or to homepage
-      const redirectTo = location.state?.redirectTo || '/';
-      navigate(redirectTo);
-    }, 1500);
+    }
   };
 
   return (
@@ -49,6 +49,28 @@ const Login = () => {
             <div className="text-center mb-8">
               <h1 className="text-3xl font-serif font-bold mb-2">Welcome Back</h1>
               <p className="text-gray-400">Sign in to your LuxeStay account</p>
+              <div className="mt-4 p-2 bg-gray-800/60 rounded-lg">
+                <p className="text-sm text-gray-300 mb-2">Demo Accounts:</p>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="bg-gray-700/50 p-2 rounded">
+                    <div className="font-medium text-luxe-gold">Customer</div>
+                    <div>customer@example.com</div>
+                  </div>
+                  <div className="bg-gray-700/50 p-2 rounded">
+                    <div className="font-medium text-luxe-gold">Manager</div>
+                    <div>manager@example.com</div>
+                  </div>
+                  <div className="bg-gray-700/50 p-2 rounded">
+                    <div className="font-medium text-luxe-gold">Admin</div>
+                    <div>admin@example.com</div>
+                  </div>
+                  <div className="bg-gray-700/50 p-2 rounded">
+                    <div className="font-medium text-luxe-gold">Guest</div>
+                    <div>guest@example.com</div>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-400 mt-2">Any password will work</p>
+              </div>
             </div>
             
             <form onSubmit={handleLogin} className="space-y-6">
