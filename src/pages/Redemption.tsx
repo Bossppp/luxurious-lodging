@@ -68,6 +68,15 @@ const RedemptionPage = () => {
     ]);
   };
 
+  // Function to switch tabs
+  const switchToRewardsTab = () => {
+    // Find the rewards tab trigger and click it
+    const tabsTrigger = document.querySelector('[data-state="inactive"][value="rewards"]') as HTMLElement;
+    if (tabsTrigger) {
+      tabsTrigger.click();
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-luxe-dark to-gray-900">
       <Navbar />
@@ -219,7 +228,7 @@ const RedemptionPage = () => {
                   <h3 className="text-xl font-medium text-white mb-2">No Redemption History</h3>
                   <p className="text-gray-400 mb-6">You haven't redeemed any rewards yet.</p>
                   <Button 
-                    onClick={() => document.querySelector('[data-state="inactive"][value="rewards"]')?.click()}
+                    onClick={switchToRewardsTab}
                     variant="outline"
                     className="border-luxe-gold text-luxe-gold hover:bg-luxe-gold hover:text-black"
                   >
