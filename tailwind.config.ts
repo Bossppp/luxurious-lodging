@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -52,6 +53,13 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				luxe: {
+					dark: "#1A1F2C",
+					gold: "#D4AF37",
+					cream: "#F5F5DC",
+					light: "#F8F7F4",
+					muted: "#8D8D8D"
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -67,6 +75,10 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			fontFamily: {
+				serif: ['Playfair Display', 'serif'],
+				sans: ['Montserrat', 'sans-serif']
 			},
 			keyframes: {
 				'accordion-down': {
@@ -84,11 +96,20 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'shimmer': {
+					'100%': {
+						transform: 'translateX(100%)',
+					},
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'shimmer': 'shimmer 2s infinite',
+			},
+			backgroundImage: {
+				'gold-gradient': 'linear-gradient(to right, #D4AF37, #F5F5DC, #D4AF37)',
 			}
 		}
 	},
