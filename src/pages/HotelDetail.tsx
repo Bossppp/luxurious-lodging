@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -11,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon, Star, MapPin, Users, Wifi, Coffee, Utensils, DumbBell, Waves, Check, User } from 'lucide-react';
+import { Calendar as CalendarIcon, Star, MapPin, Users, Wifi, Coffee, Utensils, Dumbbell, Waves, Check, User } from 'lucide-react';
 
 const HotelDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,10 +21,9 @@ const HotelDetail = () => {
   const [checkInDate, setCheckInDate] = useState<Date | undefined>(undefined);
   const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(undefined);
   const [guests, setGuests] = useState(1);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // This would be replaced with proper auth state
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // In a real app, this would be an API call to get hotel and room data
     if (id) {
       const foundHotel = MOCK_HOTELS.find(h => h.id === id);
       if (foundHotel) {
@@ -33,7 +31,6 @@ const HotelDetail = () => {
         const hotelRooms = MOCK_ROOMS[id] || [];
         setRooms(hotelRooms);
       } else {
-        // Hotel not found, redirect to hotels page
         navigate('/hotels');
       }
     }
@@ -50,7 +47,7 @@ const HotelDetail = () => {
       case 'room service':
         return <Coffee className="h-5 w-5" />;
       case 'gym':
-        return <DumbBell className="h-5 w-5" />;
+        return <Dumbbell className="h-5 w-5" />;
       case 'pool':
       case 'private beach':
         return <Waves className="h-5 w-5" />;
@@ -80,17 +77,14 @@ const HotelDetail = () => {
 
   const handleBooking = () => {
     if (!isLoggedIn) {
-      // Redirect to login page if not logged in
       navigate('/login', { state: { redirectTo: `/hotels/${id}` } });
       return;
     }
 
     if (!selectedRoom || !checkInDate || !checkOutDate) {
-      // Show error or validation message
       return;
     }
 
-    // Navigate to booking confirmation page with details
     navigate('/booking/confirm', {
       state: {
         hotelId: id,
@@ -119,7 +113,6 @@ const HotelDetail = () => {
       <Navbar />
       
       <main className="flex-grow">
-        {/* Hotel Header */}
         <div className="relative h-80 md:h-96">
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -154,10 +147,8 @@ const HotelDetail = () => {
           </div>
         </div>
         
-        {/* Main Content */}
         <div className="py-8 luxe-container">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column */}
             <div className="lg:col-span-2">
               <Tabs defaultValue="overview">
                 <TabsList className="w-full border-b border-gray-800 bg-transparent">
@@ -283,7 +274,6 @@ const HotelDetail = () => {
                   </div>
                   
                   <div className="space-y-6">
-                    {/* Sample reviews - would be populated from API in real app */}
                     <div className="bg-gray-900/30 rounded-lg p-5">
                       <div className="flex justify-between items-start mb-3">
                         <div className="flex items-center">
@@ -374,7 +364,6 @@ const HotelDetail = () => {
               </Tabs>
             </div>
             
-            {/* Right Column - Booking Widget */}
             <div className="lg:col-span-1">
               <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 sticky top-4">
                 <h3 className="text-xl font-serif font-semibold mb-4">Book Your Stay</h3>
