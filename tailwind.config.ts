@@ -60,6 +60,15 @@ export default {
 					light: "#F8F7F4",
 					muted: "#8D8D8D"
 				},
+				// New theme colors
+				theme: {
+					gold: "#AC9055",
+					darkBlue: "#161F48",
+					navy: "#1C2E5D",
+					blue: "#284574",
+					cream: "#E1C582",
+					amber: "#D2A047"
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -110,6 +119,8 @@ export default {
 			},
 			backgroundImage: {
 				'gold-gradient': 'linear-gradient(to right, #D4AF37, #F5F5DC, #D4AF37)',
+				'theme-gradient': 'linear-gradient(to right, #AC9055, #E1C582, #D2A047)',
+				'navy-gradient': 'linear-gradient(to bottom, #161F48, #1C2E5D, #284574)',
 			}
 		}
 	},
